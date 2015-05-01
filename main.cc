@@ -23,10 +23,10 @@
 #include <iostream>
 
 #ifdef __WIN32
-	#include <windows.h>
+#include <windows.h>
 #else
-	#include <sys/stat.h>
- 	#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #endif
 
 
@@ -39,38 +39,38 @@ bool string_ends_with(const std::string& s, const std::string& suffix){
 
 enum textquality {solid, shaded, blended};
 
- SDL_Surface *drawtext(TTF_Font *fonttodraw, char fgR, char fgG, char fgB, char fgA,
- char bgR, char bgG, char bgB, char bgA, char text[], textquality quality)
- {
-   SDL_Color tmpfontcolor = {fgR,fgG,fgB,fgA};
-   SDL_Color tmpfontbgcolor = {bgR, bgG, bgB, bgA};
-   SDL_Surface *resulting_text;
+SDL_Surface *drawtext(TTF_Font *fonttodraw, char fgR, char fgG, char fgB, char fgA,
+                      char bgR, char bgG, char bgB, char bgA, char text[], textquality quality)
+{
+    SDL_Color tmpfontcolor = {fgR,fgG,fgB,fgA};
+    SDL_Color tmpfontbgcolor = {bgR, bgG, bgB, bgA};
+    SDL_Surface *resulting_text;
 
-   if (quality == solid) resulting_text = TTF_RenderText_Solid(fonttodraw, text, tmpfontcolor);
-   else if (quality == shaded) resulting_text = TTF_RenderText_Shaded(fonttodraw, text, tmpfontcolor, tmpfontbgcolor);
-   else if (quality == blended) resulting_text = TTF_RenderText_Blended(fonttodraw, text, tmpfontcolor);
+    if (quality == solid) resulting_text = TTF_RenderText_Solid(fonttodraw, text, tmpfontcolor);
+    else if (quality == shaded) resulting_text = TTF_RenderText_Shaded(fonttodraw, text, tmpfontcolor, tmpfontbgcolor);
+    else if (quality == blended) resulting_text = TTF_RenderText_Blended(fonttodraw, text, tmpfontcolor);
 
-   return resulting_text;
- }
+    return resulting_text;
+}
 
 void createDirectory(const char *folder){
-	#ifdef __WIN32
-	CreateDirectory(folder, NULL);
-	#else
-	struct stat st = {0};
+#ifdef __WIN32
+    CreateDirectory(folder, NULL);
+#else
+    struct stat st = {0};
     if (stat(folder, &st) == -1){
-		mkdir (folder, 0777);
-	}
+        mkdir (folder, 0777);
+    }
 
-	#endif
+#endif
 }
 
 int main (int argc, char *argv[]){
-	if (SDL_Init(SDL_INIT_EVERYTHING)< 0){
-		printf("Failed to init SDL Version 1.2 \n");
-		SDL_Quit(); //clean up whatever is left
-		return 1;
-	}
+    if (SDL_Init(SDL_INIT_EVERYTHING)< 0){
+        printf("Failed to init SDL Version 1.2 \n");
+        SDL_Quit(); //clean up whatever is left
+        return 1;
+    }
 
     if (TTF_Init() == -1)
     {
@@ -78,44 +78,44 @@ int main (int argc, char *argv[]){
         SDL_Quit();
         return 1;
     }
-	//check arguments
+    //check arguments
     for (unsigned i = 1; i < argc; i++){
-		std::string argument(argv[i]);
-		if (argument.find ("-s") == 0){
-			argument.erase(0,2);
-			char *argument_info = const_cast <char *> (argument.c_str());
-			if (argument_info == "solid"){
-				FontRenderStyle = 0;
-			} else if (argument_info == "shaded"){
-				FontRenderStyle = 1;
-			} else if (argument_info == "blended"){
-				FontRenderStyle = 2;
-			} else {
-				printf ("Invalid argument after '-s' token \n");
-				SDL_Quit();
-				return 1;
-			}
-		}
-		else if (argument.find ("-p") == 0){
-			//extract path
+        std::string argument(argv[i]);
+        if (argument.find ("-s") == 0){
+            argument.erase(0,2);
+            char *argument_info = const_cast <char *> (argument.c_str());
+            if (argument_info == "solid"){
+                FontRenderStyle = 0;
+            } else if (argument_info == "shaded"){
+                FontRenderStyle = 1;
+            } else if (argument_info == "blended"){
+                FontRenderStyle = 2;
+            } else {
+                printf ("Invalid argument after '-s' token \n");
+                SDL_Quit();
+                return 1;
+            }
+        }
+        else if (argument.find ("-p") == 0){
+            //extract path
             if (!string_ends_with(argument, std::string (".ttf"))){
-				printf ("This converter only accepts .ttf file types \n");
-				SDL_Quit();
-				return 1;
-			}
-			argument.erase (0,2);
-			texpath = argument;
+                printf ("This converter only accepts .ttf file types \n");
+                SDL_Quit();
+                return 1;
+            }
+            argument.erase (0,2);
+            texpath = argument;
         } else if (argument.find ("-i") == 0){
             argument.erase(0,2);
             char *argument_info = const_cast <char *> (argument.c_str());
             size = atoi (argument_info);
         }
-		else {
-			printf("Invalid argument, %s \n", argument.c_str());
+        else {
+            printf("Invalid argument, %s \n", argument.c_str());
             SDL_Quit();
             return 1;
-		}
-	}
+        }
+    }
 
 
     createDirectory("Font-Coverted");
