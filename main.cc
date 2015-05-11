@@ -154,16 +154,18 @@ int main (int argc, char *argv[]){
         SDL_Surface *character = drawtext(font, 1,1,1,1,0,0,0,1, print, solid);
 
         if (!character) continue;
-        std::cout <<print << std::endl;
+
+        Uint32 white = SDL_MapRGB(character->format, 255, 255, 255);
+        SDL_SetColorKey(character,  SDL_SRCCOLORKEY, white);
         /*
-        std::stringstream ss;
+       std::stringstream ss;
         ss << "Font/";
         ss << print;
         ss << ".bmp";
         std::string filesavepath = ss.str();
         */
         std::string filesavepath;
-        filesavepath += std::string( "Font/");
+        filesavepath += std::string( "Font-Coverted/");
         filesavepath += std::string (print);
         filesavepath += std::string (".bmp");
         std::cout << "Saving:" << filesavepath << std::endl;
